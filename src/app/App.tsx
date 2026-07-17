@@ -1,8 +1,17 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 import { AppRouter } from './AppRouter';
 
+const AUTH_ROUTES = ['/login', '/register'];
+
 export function App() {
+  const location = useLocation();
+  const isAuthRoute = AUTH_ROUTES.includes(location.pathname);
+
+  if (isAuthRoute) {
+    return <AppRouter />;
+  }
+
   return (
     <div className="app-shell">
       <nav className="app-sidebar">

@@ -1,5 +1,9 @@
-import { LoginForm } from '../features/auth';
+import { AuthLayout, LoginForm } from '../features/auth';
 
 export function LoginPage() {
-  return <LoginForm />;
+  return (
+    <AuthLayout title="Log in to your account">
+      <LoginForm />
+    </AuthLayout>
+  );
 }
