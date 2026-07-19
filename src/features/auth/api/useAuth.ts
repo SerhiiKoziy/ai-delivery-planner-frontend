@@ -3,12 +3,18 @@ import { useNavigate } from 'react-router-dom';
 
 import { apiClient } from '../../../api/client';
 import { useAuthStore } from '../../../store/authStore';
-import type { AuthTokens, LoginRequest, RegisterRequest } from '../types';
+import type { AuthTokens, LoginRequest, RegisterRequest, RegisterResult } from '../types';
 
 interface TokenResponse {
   access_token: string;
   refresh_token: string;
   token_type: string;
+}
+
+interface RegisterResponse {
+  user_id: string;
+  email: string;
+  message: string;
 }
 
 function toAuthTokens(response: TokenResponse): AuthTokens {
@@ -24,9 +30,9 @@ async function login(request: LoginRequest): Promise<AuthTokens> {
   return toAuthTokens(data);
 }
 
-async function register(request: RegisterRequest): Promise<AuthTokens> {
-  const { data } = await apiClient.post<TokenResponse>('/auth/register', request);
-  return toAuthTokens(data);
+async function register(request: RegisterRequest): Promise<RegisterResult> {
+  const { data } = await apiClient.post<RegisterResponse>('/auth/register', request);
+  return { userId: data.user_id, email: data.email, message: data.message };
 }
 
 export function useAuth() {
@@ -42,12 +48,11 @@ export function useAuth() {
     },
   });
 
+  // Registration no longer logs the user in directly — the account stays
+  // unverified until the emailed /verify-email link is followed (see
+  // useVerifyEmail), so this mutation just reports whether the email was sent.
   const registerMutation = useMutation({
     mutationFn: register,
-    onSuccess: (tokens) => {
-      storeLogin(tokens);
-      navigate('/');
-    },
   });
 
   return { login: loginMutation, register: registerMutation, logout };

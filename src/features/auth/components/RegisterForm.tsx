@@ -33,6 +33,20 @@ export function RegisterForm() {
     register.mutate({ email, password });
   };
 
+  if (register.isSuccess) {
+    return (
+      <div className="auth-form">
+        <p className="text-sm text-ink">
+          We sent a verification link to <strong>{register.data.email}</strong>. Click it to
+          activate your account, then log in.
+        </p>
+        <div className="auth-card__footer">
+          <Link to="/login">Back to log in</Link>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <form className="auth-form" onSubmit={handleSubmit} noValidate>
       {register.isError && (

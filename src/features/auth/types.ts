@@ -11,3 +11,9 @@ export interface AuthTokens {
   refreshToken: string;
   tokenType: string;
 }
+
+export interface RegisterResult {
+  userId: string;
+  email: string;
+  message: string;
+}

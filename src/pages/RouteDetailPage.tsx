@@ -1,6 +1,7 @@
 import { Link, useParams } from 'react-router-dom';
 
 import { ChatPanel } from '../features/chat';
+import { ReplanPanel } from '../features/replanning';
 import { useRoute } from '../features/routes/api/useRoute';
 import { RouteMap } from '../features/routes/components/RouteMap';
 import { RouteTimeline } from '../features/routes/components/RouteTimeline';
@@ -46,6 +47,8 @@ export function RouteDetailPage() {
           </div>
         </div>
       )}
+
+      {route && <ReplanPanel routeId={route.id} />}
     </div>
   );
 }

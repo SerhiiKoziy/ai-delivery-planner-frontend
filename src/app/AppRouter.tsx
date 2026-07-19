@@ -7,9 +7,10 @@ import { LoginPage } from '../pages/LoginPage';
 import { RegisterPage } from '../pages/RegisterPage';
 import { RouteDetailPage } from '../pages/RouteDetailPage';
 import { RoutesPage } from '../pages/RoutesPage';
+import { VerifyEmailPage } from '../pages/VerifyEmailPage';
 import { useAuthStore } from '../store/authStore';
 
-function PrivateRoute({ children }: { children: React.ReactElement }) {
+export function PrivateRoute({ children }: { children: React.ReactElement }) {
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const location = useLocation();
   if (!isAuthenticated) {
@@ -23,6 +24,7 @@ export function AppRouter() {
     <Routes>
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
+      <Route path="/verify-email" element={<VerifyEmailPage />} />
       <Route
         path="/"
         element={
