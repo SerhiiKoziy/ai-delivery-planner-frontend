@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { apiClient } from '../../../api/client';
 import type { OptimizeRequest, OptimizeResult } from '../types';
@@ -9,5 +9,11 @@ async function optimizeRoutes(payload: OptimizeRequest): Promise<OptimizeResult>
 }
 
 export function useOptimizeRoutes() {
-  return useMutation({ mutationFn: optimizeRoutes });
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: optimizeRoutes,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['routes'] });
+    },
+  });
 }

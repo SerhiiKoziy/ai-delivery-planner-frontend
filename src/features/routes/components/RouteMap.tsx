@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import type { Route } from '../types';
 
@@ -35,6 +35,7 @@ export function RouteMap({ route }: Props) {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstance = useRef<google.maps.Map | null>(null);
   const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+  const [mapReady, setMapReady] = useState(false);
 
   useEffect(() => {
     if (!apiKey || !mapRef.current) return;
@@ -52,6 +53,7 @@ export function RouteMap({ route }: Props) {
           { featureType: 'water', elementType: 'geometry', stylers: [{ color: '#06150c' }] },
         ],
       });
+      setMapReady(true);
     };
 
     if (window.google?.maps) { loadMap(); return; }
@@ -68,7 +70,7 @@ export function RouteMap({ route }: Props) {
   }, [apiKey]);
 
   useEffect(() => {
-    if (!mapInstance.current || !route) return;
+    if (!mapReady || !mapInstance.current || !route) return;
     const map = mapInstance.current;
     const stopsWithCoords = route.stops.filter(
       (s): s is typeof s & { latitude: number; longitude: number } =>
@@ -93,7 +95,7 @@ export function RouteMap({ route }: Props) {
     });
 
     map.fitBounds(bounds);
-  }, [route]);
+  }, [route, mapReady]);
 
   if (!apiKey) return <NoKeyPlaceholder route={route} />;
 

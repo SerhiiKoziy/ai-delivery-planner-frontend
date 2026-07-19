@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { RoutesList } from '../features/routes';
+
 const inputCls =
   'bg-panel border border-edge rounded-lg px-3.5 py-2 text-sm text-ink placeholder:text-ink-muted focus:outline-none focus:border-primary transition-colors';
 
@@ -30,13 +32,7 @@ export function RoutesPage() {
         </form>
       </div>
 
-      <div className="flex flex-col items-center justify-center py-16 gap-2 text-center">
-        <span className="text-5xl mb-2">🗺️</span>
-        <p className="font-semibold text-ink">No route loaded</p>
-        <p className="text-sm text-ink-muted">
-          Enter a Route ID above after running optimization to view its map, timeline, and AI chat
-        </p>
-      </div>
+      <RoutesList />
     </div>
   );
 }

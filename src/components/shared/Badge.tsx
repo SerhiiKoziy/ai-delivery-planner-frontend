@@ -10,6 +10,7 @@ export type BadgeVariant =
   | 'vip'
   | 'active'
   | 'inactive'
+  | 'planned'
   | 'default';
 
 const VARIANT_CLASSES: Record<BadgeVariant, string> = {
@@ -24,6 +25,7 @@ const VARIANT_CLASSES: Record<BadgeVariant, string> = {
   vip:        'bg-purple-400/20 text-purple-300',
   active:     'bg-primary-muted text-primary-light',
   inactive:   'bg-ink-muted/20 text-ink-muted',
+  planned:    'bg-blue-400/15 text-blue-300',
   default:    'bg-ink-muted/20 text-ink-muted',
 };
 
