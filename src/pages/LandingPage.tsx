@@ -54,42 +54,58 @@ const VALUE_PROPS = [
 export function LandingPage() {
   return (
     <div className="min-h-screen bg-canvas text-ink">
-      <header className="flex items-center justify-between max-w-6xl mx-auto px-6 py-6">
-        <div className="flex items-center gap-2 font-semibold text-lg">
-          <span>🚚</span>
-          AI Delivery Planner
-        </div>
-        <div className="flex items-center gap-3">
-          <Link to="/login" className="text-sm text-ink-muted hover:text-ink no-underline">
-            Log in
-          </Link>
-          <Link to="/register">
-            <Button variant="primary">Get started free</Button>
-          </Link>
-        </div>
-      </header>
-
       <main>
-        <section className="max-w-4xl mx-auto px-6 pt-12 pb-20 text-center flex flex-col items-center gap-6">
-          <h1 className="text-4xl md:text-5xl font-bold leading-tight m-0">
-            Plan your delivery routes with AI, not spreadsheets.
-          </h1>
-          <p className="text-lg text-ink-muted max-w-2xl m-0">
-            AI Delivery Planner combines route optimization with an AI assistant so your team can
-            plan a full day of deliveries — drivers, vehicles, and stops — in minutes, then adapt
-            on the fly when plans change.
-          </p>
-          <div className="flex items-center gap-4 mt-2">
-            <Link to="/register">
-              <Button variant="primary">Get started free</Button>
-            </Link>
-            <Link to="/login">
-              <Button variant="secondary">Log in</Button>
-            </Link>
+        {/* Full-viewport hero: responsive art-directed photo (different crops
+            per breakpoint, not just resolution switching) with the nav and
+            headline overlaid on a bottom-up gradient for legibility. */}
+        <section className="relative h-screen w-full overflow-hidden">
+          <picture>
+            <source media="(min-width: 1280px)" srcSet="/images/hero/hero-desktop.webp" />
+            <source media="(min-width: 641px)" srcSet="/images/hero/hero-tablet.webp" />
+            <img
+              src="/images/hero/hero-mobile.webp"
+              alt="A happy courier smiling in front of their delivery vehicle"
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+          </picture>
+          <div className="absolute inset-0 bg-gradient-to-t from-canvas via-canvas/70 to-canvas/10" />
+
+          <header className="absolute top-0 left-0 right-0 z-10 flex items-center justify-between max-w-6xl mx-auto px-6 py-6">
+            <div className="flex items-center gap-2 font-semibold text-lg">
+              <span>🚚</span>
+              AI Delivery Planner
+            </div>
+            <div className="flex items-center gap-3">
+              <Link to="/login" className="text-sm text-ink-muted hover:text-ink no-underline">
+                Log in
+              </Link>
+              <Link to="/register">
+                <Button variant="primary">Get started free</Button>
+              </Link>
+            </div>
+          </header>
+
+          <div className="relative z-10 h-full max-w-4xl mx-auto px-6 flex flex-col items-center justify-end pb-20 text-center gap-6">
+            <h1 className="text-4xl md:text-5xl font-bold leading-tight m-0">
+              Plan your delivery routes with AI, not spreadsheets.
+            </h1>
+            <p className="text-lg text-ink-muted max-w-2xl m-0">
+              AI Delivery Planner combines route optimization with an AI assistant so your team can
+              plan a full day of deliveries — drivers, vehicles, and stops — in minutes, then adapt
+              on the fly when plans change.
+            </p>
+            <div className="flex items-center gap-4 mt-2">
+              <Link to="/register">
+                <Button variant="primary">Get started free</Button>
+              </Link>
+              <Link to="/login">
+                <Button variant="secondary">Log in</Button>
+              </Link>
+            </div>
           </div>
         </section>
 
-        <section className="max-w-5xl mx-auto px-6 pb-20">
+        <section className="max-w-5xl mx-auto px-6 py-20">
           <h2 className="text-2xl font-bold text-center mb-10">How it works</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
             {STEPS.map((step, i) => (
