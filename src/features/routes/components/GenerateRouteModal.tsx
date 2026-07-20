@@ -48,6 +48,10 @@ export function GenerateRouteModal({ isOpen, onClose, deliveryIds, onGenerated }
   };
 
   const result = optimizeRoutes.data;
+  const routes = result?.routes ?? [];
+  const unassignedDeliveries = result?.unassigned_deliveries ?? [];
+  const skippedNotGeocoded = result?.skipped_not_geocoded ?? [];
+  const vehiclesWithoutDriver = result?.vehicles_without_driver ?? [];
 
   const handleViewRoute = (routeId: string) => {
     onGenerated?.();
@@ -80,12 +84,12 @@ export function GenerateRouteModal({ isOpen, onClose, deliveryIds, onGenerated }
       {result ? (
         <div className="flex flex-col gap-3 text-sm">
           <p className="text-ink">
-            {result.routes.length > 0
-              ? `Created ${result.routes.length} route${result.routes.length > 1 ? 's' : ''}.`
+            {routes.length > 0
+              ? `Created ${routes.length} route${routes.length > 1 ? 's' : ''}.`
               : 'No routes were created.'}
           </p>
 
-          {result.routes.map((route, i) => (
+          {routes.map((route, i) => (
             <div
               key={route.id}
               className="flex items-center justify-between gap-2 bg-panel border border-edge rounded-lg px-3 py-2"
@@ -99,15 +103,15 @@ export function GenerateRouteModal({ isOpen, onClose, deliveryIds, onGenerated }
             </div>
           ))}
 
-          {result.unassigned_deliveries.length > 0 && (
+          {unassignedDeliveries.length > 0 && (
             <div className="text-danger">
               <p className="m-0">
-                {result.unassigned_deliveries.length} deliver
-                {result.unassigned_deliveries.length > 1 ? 'ies' : 'y'} could not be assigned to any
+                {unassignedDeliveries.length} deliver
+                {unassignedDeliveries.length > 1 ? 'ies' : 'y'} could not be assigned to any
                 vehicle:
               </p>
               <ul className="m-0 pl-4">
-                {result.unassigned_deliveries.map((d) => (
+                {unassignedDeliveries.map((d) => (
                   <li key={d.id}>
                     {d.customer_name || 'Unnamed'}
                     {d.address ? ` — ${d.address}` : ''}
@@ -116,15 +120,15 @@ export function GenerateRouteModal({ isOpen, onClose, deliveryIds, onGenerated }
               </ul>
             </div>
           )}
-          {result.skipped_not_geocoded.length > 0 && (
+          {skippedNotGeocoded.length > 0 && (
             <div className="text-danger">
               <p className="m-0">
-                {result.skipped_not_geocoded.length} deliver
-                {result.skipped_not_geocoded.length > 1 ? 'ies were' : 'y was'} skipped (address not
+                {skippedNotGeocoded.length} deliver
+                {skippedNotGeocoded.length > 1 ? 'ies were' : 'y was'} skipped (address not
                 geocoded):
               </p>
               <ul className="m-0 pl-4">
-                {result.skipped_not_geocoded.map((d) => (
+                {skippedNotGeocoded.map((d) => (
                   <li key={d.id}>
                     {d.customer_name || 'Unnamed'}
                     {d.address ? ` — ${d.address}` : ''}
@@ -133,15 +137,15 @@ export function GenerateRouteModal({ isOpen, onClose, deliveryIds, onGenerated }
               </ul>
             </div>
           )}
-          {result.vehicles_without_driver.length > 0 && (
+          {vehiclesWithoutDriver.length > 0 && (
             <div className="text-danger">
               <p className="m-0">
-                {result.vehicles_without_driver.length} selected vehicle
-                {result.vehicles_without_driver.length > 1 ? 's have' : ' has'} no driver assigned and
-                {result.vehicles_without_driver.length > 1 ? ' were' : ' was'} skipped:
+                {vehiclesWithoutDriver.length} selected vehicle
+                {vehiclesWithoutDriver.length > 1 ? 's have' : ' has'} no driver assigned and
+                {vehiclesWithoutDriver.length > 1 ? ' were' : ' was'} skipped:
               </p>
               <ul className="m-0 pl-4">
-                {result.vehicles_without_driver.map((v) => (
+                {vehiclesWithoutDriver.map((v) => (
                   <li key={v.id}>{v.plate_number || v.id}</li>
                 ))}
               </ul>

@@ -45,8 +45,8 @@ export interface VehicleRef {
 }
 
 export interface OptimizeResult {
-  routes: Route[];
-  unassigned_deliveries: DeliveryRef[];
-  skipped_not_geocoded: DeliveryRef[];
-  vehicles_without_driver: VehicleRef[];
+  routes?: Route[];
+  unassigned_deliveries?: DeliveryRef[];
+  skipped_not_geocoded?: DeliveryRef[];
+  vehicles_without_driver?: VehicleRef[];
 }
