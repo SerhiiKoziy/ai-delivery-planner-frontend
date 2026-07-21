@@ -1,4 +1,5 @@
 import type { Route, RouteStop } from '../types';
+import { buildGoogleMapsStopUrl } from '../utils/googleMapsUrl';
 
 interface Props {
   route: Route;
@@ -10,6 +11,7 @@ function fmtTime(t: string) {
 
 function StopItem({ stop, index, isLast }: { stop: RouteStop; index: number; isLast: boolean }) {
   const name = stop.customer_name ?? `Stop ${stop.sequence}`;
+  const mapsUrl = buildGoogleMapsStopUrl(stop);
   return (
     <div className="flex gap-3">
       {/* Connector */}
@@ -22,10 +24,26 @@ function StopItem({ stop, index, isLast }: { stop: RouteStop; index: number; isL
 
       {/* Content */}
       <div className="pb-5 flex-1">
-        <div className="font-mono text-xs font-semibold text-primary">
-          {fmtTime(stop.estimated_arrival)}
+        <div className="flex items-start justify-between gap-2">
+          <div>
+            <div className="font-mono text-xs font-semibold text-primary">
+              {fmtTime(stop.estimated_arrival)}
+            </div>
+            <div className="text-base font-semibold text-ink mt-0.5">{name}</div>
+          </div>
+          {mapsUrl && (
+            <a
+              href={mapsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Open in Google Maps"
+              aria-label="Open in Google Maps"
+              className="text-lg leading-none text-ink-muted hover:text-ink flex-shrink-0"
+            >
+              <span aria-hidden="true">🧭</span>
+            </a>
+          )}
         </div>
-        <div className="text-base font-semibold text-ink mt-0.5">{name}</div>
         {stop.address && <div className="text-xs text-ink-muted mt-0.5">{stop.address}</div>}
         {stop.distance_from_previous_km > 0 && (
           <div className="text-xs text-ink-muted mt-0.5">
