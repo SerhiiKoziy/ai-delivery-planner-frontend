@@ -2,6 +2,9 @@
 
 **Live demo:** [ai-planning-assistant.vercel.app](https://ai-planning-assistant.vercel.app/)
 
+<img width="1175" height="868" alt="Main page" src="https://github.com/user-attachments/assets/ef967043-9c7d-4682-922b-94f721ec6792" />
+
+
 ## 1. What this is
 
 AI Delivery Planner is a SaaS tool for small and mid-size businesses that run their own local
