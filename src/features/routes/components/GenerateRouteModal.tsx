@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 
 import { Button, Modal } from '../../../components/shared';
 import { useDepots } from '../../depots';
+import { formatDate } from '../../../utils/formatDate';
+import { useTerritoryPlans } from '../../territories';
 import { getApiErrorMessage } from '../../../utils/getApiErrorMessage';
 import { useVehicles } from '../../vehicles';
 import { useOptimizeRoutes } from '../api/useOptimizeRoutes';
@@ -17,15 +19,26 @@ interface Props {
 export function GenerateRouteModal({ isOpen, onClose, deliveryIds, onGenerated }: Props) {
   const { data: depots = [], isLoading: depotsLoading } = useDepots();
   const { data: vehicles = [], isLoading: vehiclesLoading } = useVehicles();
+  const { data: territoryPlans = [] } = useTerritoryPlans();
   const optimizeRoutes = useOptimizeRoutes();
   const navigate = useNavigate();
 
   const [depotId, setDepotId] = useState('');
   const [vehicleIds, setVehicleIds] = useState<string[]>([]);
   const [returnToDepot, setReturnToDepot] = useState(true);
+  const [territoryPlanId, setTerritoryPlanId] = useState('');
+
+  const completedPlans = territoryPlans.filter((p) => p.status === 'completed');
 
   const toggleVehicle = (id: string) => {
     setVehicleIds((prev) => (prev.includes(id) ? prev.filter((v) => v !== id) : [...prev, id]));
+  };
+
+  // A territory plan pins each zone to a vehicle, so preselect exactly those vehicles.
+  const selectTerritoryPlan = (id: string) => {
+    setTerritoryPlanId(id);
+    const plan = completedPlans.find((p) => p.id === id);
+    if (plan) setVehicleIds(plan.zones.map((z) => z.vehicle_id));
   };
 
   const handleClose = () => {
@@ -33,6 +46,7 @@ export function GenerateRouteModal({ isOpen, onClose, deliveryIds, onGenerated }
     setDepotId('');
     setVehicleIds([]);
     setReturnToDepot(true);
+    setTerritoryPlanId('');
     onClose();
   };
 
@@ -44,6 +58,7 @@ export function GenerateRouteModal({ isOpen, onClose, deliveryIds, onGenerated }
       vehicle_ids: vehicleIds,
       depot_id: depotId,
       return_to_depot: returnToDepot,
+      territory_plan_id: territoryPlanId || undefined,
     });
   };
 
@@ -184,6 +199,31 @@ export function GenerateRouteModal({ isOpen, onClose, deliveryIds, onGenerated }
                 <span className="field__error">No depots yet — create one first.</span>
               )}
             </div>
+
+            {completedPlans.length > 0 && (
+              <div className="field">
+                <label htmlFor="gr-territory">Territory plan</label>
+                <select
+                  id="gr-territory"
+                  value={territoryPlanId}
+                  onChange={(e) => selectTerritoryPlan(e.target.value)}
+                >
+                  <option value="">None — any vehicle can take any delivery</option>
+                  {completedPlans.map((plan) => (
+                    <option key={plan.id} value={plan.id}>
+                      {formatDate(plan.created_at)} — {plan.num_zones} zones, {plan.num_deliveries}{' '}
+                      deliveries ({plan.solver})
+                    </option>
+                  ))}
+                </select>
+                {territoryPlanId && (
+                  <span className="text-xs text-ink-muted">
+                    Each delivery stays on its zone's vehicle; deliveries outside the plan are
+                    unrestricted.
+                  </span>
+                )}
+              </div>
+            )}
 
             <div className="field">
               <label>Vehicles *</label>

@@ -31,6 +31,8 @@ export interface OptimizeRequest {
   vehicle_ids: string[];
   depot_id: string;
   return_to_depot?: boolean;
+  // Restrict each delivery to the vehicle owning its zone in this territory plan.
+  territory_plan_id?: string;
 }
 
 export interface DeliveryRef {

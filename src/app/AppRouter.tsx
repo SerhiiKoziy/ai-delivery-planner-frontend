@@ -6,9 +6,12 @@ import { DepotsPage } from '../pages/DepotsPage';
 import { DriversPage } from '../pages/DriversPage';
 import { LandingPage } from '../pages/LandingPage';
 import { LoginPage } from '../pages/LoginPage';
+import { QuantumLabPage } from '../pages/QuantumLabPage';
 import { RegisterPage } from '../pages/RegisterPage';
 import { RouteDetailPage } from '../pages/RouteDetailPage';
 import { RoutesPage } from '../pages/RoutesPage';
+import { TerritoriesPage } from '../pages/TerritoriesPage';
+import { TerritoryPlanDetailPage } from '../pages/TerritoryPlanDetailPage';
 import { VehiclesPage } from '../pages/VehiclesPage';
 import { VerifyEmailPage } from '../pages/VerifyEmailPage';
 import { useAuthStore } from '../store/authStore';
@@ -82,6 +85,30 @@ export function AppRouter() {
         element={
           <PrivateRoute>
             <RouteDetailPage />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/territories"
+        element={
+          <PrivateRoute>
+            <TerritoriesPage />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/territories/:id"
+        element={
+          <PrivateRoute>
+            <TerritoryPlanDetailPage />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/quantum"
+        element={
+          <PrivateRoute>
+            <QuantumLabPage />
           </PrivateRoute>
         }
       />
