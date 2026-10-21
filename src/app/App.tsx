@@ -16,6 +16,8 @@ const NAV_LINKS = [
   { to: '/depots', label: 'Depots', end: false },
   { to: '/vehicles', label: 'Vehicles', end: false },
   { to: '/routes', label: 'Routes', end: false },
+  { to: '/territories', label: 'Territories', end: false },
+  { to: '/quantum', label: 'Quantum lab', end: false },
 ];
 
 export function App() {
