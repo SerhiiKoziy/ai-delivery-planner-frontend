@@ -8,7 +8,7 @@ import { AppRouter } from './AppRouter';
 // of auth state — /verify-email must stay shell-less even after it flips
 // isAuthenticated to true mid-page, or AppRouter remounts into the sidebar
 // branch and the verification result flashes back to a loading state.
-const AUTH_ROUTES = ['/login', '/register', '/verify-email'];
+const AUTH_ROUTES = ['/login', '/register', '/verify-email', '/forgot-password', '/reset-password'];
 
 const NAV_LINKS = [
   { to: '/', label: 'Dashboard', end: true },

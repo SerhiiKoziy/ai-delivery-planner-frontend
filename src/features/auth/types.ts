@@ -12,6 +12,15 @@ export interface AuthTokens {
   tokenType: string;
 }
 
+export interface ForgotPasswordRequest {
+  email: string;
+}
+
+export interface ResetPasswordRequest {
+  token: string;
+  newPassword: string;
+}
+
 export type UserRole = 'user' | 'admin';
 
 export interface CurrentUser {

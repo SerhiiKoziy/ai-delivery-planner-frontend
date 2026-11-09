@@ -55,6 +55,9 @@ export function LoginForm() {
           onChange={(e) => setPassword(e.target.value)}
         />
         {fieldErrors.password && <span className="field__error">{fieldErrors.password}</span>}
+        <Link to="/forgot-password" className="text-sm self-end">
+          Forgot password?
+        </Link>
       </div>
 
       <Button type="submit" className="btn--block" disabled={login.isPending}>

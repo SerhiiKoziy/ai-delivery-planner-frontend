@@ -5,10 +5,12 @@ import { DashboardPage } from '../pages/DashboardPage';
 import { DeliveriesPage } from '../pages/DeliveriesPage';
 import { DepotsPage } from '../pages/DepotsPage';
 import { DriversPage } from '../pages/DriversPage';
+import { ForgotPasswordPage } from '../pages/ForgotPasswordPage';
 import { LandingPage } from '../pages/LandingPage';
 import { LoginPage } from '../pages/LoginPage';
 import { QuantumLabPage } from '../pages/QuantumLabPage';
 import { RegisterPage } from '../pages/RegisterPage';
+import { ResetPasswordPage } from '../pages/ResetPasswordPage';
 import { RouteDetailPage } from '../pages/RouteDetailPage';
 import { RoutesPage } from '../pages/RoutesPage';
 import { TerritoriesPage } from '../pages/TerritoriesPage';
@@ -53,6 +55,8 @@ export function AppRouter() {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/verify-email" element={<VerifyEmailPage />} />
+      <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+      <Route path="/reset-password" element={<ResetPasswordPage />} />
       <Route path="/" element={<HomeRoute />} />
       <Route
         path="/deliveries"
