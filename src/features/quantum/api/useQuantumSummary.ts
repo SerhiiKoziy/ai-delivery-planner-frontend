@@ -8,10 +8,13 @@ async function fetchQuantumSummary(): Promise<QuantumSummary> {
   return data;
 }
 
-export function useQuantumSummary(options: { refetchInterval?: number | false } = {}) {
+export function useQuantumSummary(
+  options: { refetchInterval?: number | false; enabled?: boolean } = {},
+) {
   return useQuery({
     queryKey: ['quantum', 'summary'],
     queryFn: fetchQuantumSummary,
     refetchInterval: options.refetchInterval,
+    enabled: options.enabled ?? true,
   });
 }

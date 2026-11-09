@@ -12,6 +12,16 @@ export interface AuthTokens {
   tokenType: string;
 }
 
+export type UserRole = 'user' | 'admin';
+
+export interface CurrentUser {
+  id: string;
+  email: string;
+  organizationId: string;
+  role: UserRole;
+  isVerified: boolean;
+}
+
 export interface RegisterResult {
   userId: string;
   email: string;

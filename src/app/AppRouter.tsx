@@ -1,5 +1,6 @@
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 
+import { useCurrentUser } from '../features/auth';
 import { DashboardPage } from '../pages/DashboardPage';
 import { DeliveriesPage } from '../pages/DeliveriesPage';
 import { DepotsPage } from '../pages/DepotsPage';
@@ -21,6 +22,19 @@ export function PrivateRoute({ children }: { children: React.ReactElement }) {
   const location = useLocation();
   if (!isAuthenticated) {
     return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+  return children;
+}
+
+// Admin-only pages (the quantum lab): regular users are sent to the dashboard.
+// Nothing renders until /auth/me answers, so the page never flashes for them.
+export function AdminRoute({ children }: { children: React.ReactElement }) {
+  const { data: user, isLoading } = useCurrentUser();
+  if (isLoading) {
+    return null;
+  }
+  if (user?.role !== 'admin') {
+    return <Navigate to="/" replace />;
   }
   return children;
 }
@@ -108,7 +122,9 @@ export function AppRouter() {
         path="/quantum"
         element={
           <PrivateRoute>
-            <QuantumLabPage />
+            <AdminRoute>
+              <QuantumLabPage />
+            </AdminRoute>
           </PrivateRoute>
         }
       />

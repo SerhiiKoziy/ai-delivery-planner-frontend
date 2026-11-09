@@ -1,15 +1,29 @@
 import { useNavigate } from 'react-router-dom';
 
 import { formatDate } from '../../../utils/formatDate';
+import { useIsAdmin } from '../../auth';
 import { StatusBadge, formatMs, formatNum } from '../../quantum';
 import { useTerritoryPlans } from '../api/useTerritoryPlans';
 import { SOLVER_LABELS } from '../constants';
 
-const HEADERS = ['Created', 'Solver', 'Status', 'Zones', 'Deliveries', 'Quantum steps', 'Imbalance', 'Time', ''];
+const QUANTUM_HEADER = 'Quantum steps';
+const HEADERS = [
+  'Created',
+  'Solver',
+  'Status',
+  'Zones',
+  'Deliveries',
+  QUANTUM_HEADER,
+  'Imbalance',
+  'Time',
+  '',
+];
 
 export function TerritoryPlansList() {
   const { data: plans = [], isLoading, isError } = useTerritoryPlans();
   const navigate = useNavigate();
+  const isAdmin = useIsAdmin();
+  const headers = isAdmin ? HEADERS : HEADERS.filter((h) => h !== QUANTUM_HEADER);
 
   if (isLoading) {
     return (
@@ -33,7 +47,9 @@ export function TerritoryPlansList() {
       <div className="flex flex-col items-center justify-center py-16 gap-2 text-center">
         <span className="text-5xl mb-2">🧭</span>
         <p className="font-semibold text-ink">No territory plans yet</p>
-        <p className="text-sm text-ink-muted">Calculate zones above to split deliveries between vehicles</p>
+        <p className="text-sm text-ink-muted">
+          Calculate zones above to split deliveries between vehicles
+        </p>
       </div>
     );
   }
@@ -43,7 +59,7 @@ export function TerritoryPlansList() {
       <table className="w-full border-collapse text-sm">
         <thead>
           <tr>
-            {HEADERS.map((h) => (
+            {headers.map((h) => (
               <th
                 key={h}
                 className="bg-panel text-ink-muted font-medium text-xs uppercase tracking-wider px-4 py-2.5 text-left border-b border-edge whitespace-nowrap"
@@ -62,16 +78,30 @@ export function TerritoryPlansList() {
                 className="border-b border-edge last:border-b-0 hover:bg-card-hover transition-colors cursor-pointer"
                 onClick={() => navigate(`/territories/${plan.id}`)}
               >
-                <td className="px-4 py-3 text-ink-muted whitespace-nowrap">{formatDate(plan.created_at)}</td>
-                <td className="px-4 py-3 text-ink">{SOLVER_LABELS[plan.solver] ?? plan.solver}</td>
-                <td className="px-4 py-3"><StatusBadge status={plan.status} /></td>
-                <td className="px-4 py-3 font-mono text-xs text-ink-muted">{plan.num_zones}</td>
-                <td className="px-4 py-3 font-mono text-xs text-ink-muted">{plan.num_deliveries}</td>
-                <td className="px-4 py-3 font-mono text-xs text-ink-muted">
-                  {m.quantum_runs == null ? '—' : `${m.quantum_steps_used ?? 0} / ${m.quantum_runs}`}
+                <td className="px-4 py-3 text-ink-muted whitespace-nowrap">
+                  {formatDate(plan.created_at)}
                 </td>
-                <td className="px-4 py-3 font-mono text-xs text-ink-muted">{formatNum(m.imbalance, 2)}</td>
-                <td className="px-4 py-3 font-mono text-xs text-ink-muted">{formatMs(plan.total_ms)}</td>
+                <td className="px-4 py-3 text-ink">{SOLVER_LABELS[plan.solver] ?? plan.solver}</td>
+                <td className="px-4 py-3">
+                  <StatusBadge status={plan.status} />
+                </td>
+                <td className="px-4 py-3 font-mono text-xs text-ink-muted">{plan.num_zones}</td>
+                <td className="px-4 py-3 font-mono text-xs text-ink-muted">
+                  {plan.num_deliveries}
+                </td>
+                {isAdmin && (
+                  <td className="px-4 py-3 font-mono text-xs text-ink-muted">
+                    {m.quantum_runs == null
+                      ? '—'
+                      : `${m.quantum_steps_used ?? 0} / ${m.quantum_runs}`}
+                  </td>
+                )}
+                <td className="px-4 py-3 font-mono text-xs text-ink-muted">
+                  {formatNum(m.imbalance, 2)}
+                </td>
+                <td className="px-4 py-3 font-mono text-xs text-ink-muted">
+                  {formatMs(plan.total_ms)}
+                </td>
                 <td className="px-4 py-3 text-right text-ink-muted">→</td>
               </tr>
             );

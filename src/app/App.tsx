@@ -1,5 +1,6 @@
 import { NavLink, useLocation } from 'react-router-dom';
 
+import { useIsAdmin } from '../features/auth';
 import { useAuthStore } from '../store/authStore';
 import { AppRouter } from './AppRouter';
 
@@ -17,14 +18,16 @@ const NAV_LINKS = [
   { to: '/vehicles', label: 'Vehicles', end: false },
   { to: '/routes', label: 'Routes', end: false },
   { to: '/territories', label: 'Territories', end: false },
-  { to: '/quantum', label: 'Quantum lab', end: false },
+  { to: '/quantum', label: 'Quantum lab', end: false, adminOnly: true },
 ];
 
 export function App() {
   const location = useLocation();
   const logout = useAuthStore((s) => s.logout);
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const isAdmin = useIsAdmin();
   const isAuthRoute = AUTH_ROUTES.includes(location.pathname);
+  const navLinks = NAV_LINKS.filter((link) => !link.adminOnly || isAdmin);
 
   if (isAuthRoute || !isAuthenticated) {
     return <AppRouter />;
@@ -39,7 +42,7 @@ export function App() {
         </div>
 
         <div className="flex flex-col gap-0.5 flex-1">
-          {NAV_LINKS.map((link) => (
+          {navLinks.map((link) => (
             <NavLink
               key={link.to}
               to={link.to}

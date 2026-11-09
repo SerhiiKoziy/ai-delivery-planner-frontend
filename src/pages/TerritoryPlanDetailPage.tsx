@@ -1,5 +1,6 @@
 import { Link, useParams } from 'react-router-dom';
 
+import { useIsAdmin } from '../features/auth';
 import { useDeliveries } from '../features/deliveries';
 import { StatusBadge, formatMs, formatNum } from '../features/quantum';
 import {
@@ -23,6 +24,7 @@ export function TerritoryPlanDetailPage() {
   const { id } = useParams<{ id: string }>();
   const { data: plan, isLoading, isError } = useTerritoryPlan(id);
   const { data: deliveries = [] } = useDeliveries();
+  const isAdmin = useIsAdmin();
 
   const m = plan?.metrics ?? {};
   const skipped = m.skipped_not_geocoded ?? [];
@@ -45,7 +47,7 @@ export function TerritoryPlanDetailPage() {
             </p>
           )}
         </div>
-        {plan && plan.metrics.quantum_runs != null && plan.metrics.quantum_runs > 0 && (
+        {isAdmin && plan && plan.metrics.quantum_runs != null && plan.metrics.quantum_runs > 0 && (
           <Link to={`/quantum?plan=${plan.id}`} className="btn btn--secondary">
             ⚛️ Quantum runs of this plan →
           </Link>
@@ -74,17 +76,21 @@ export function TerritoryPlanDetailPage() {
             <Metric label="Deliveries" value={plan.num_deliveries} />
             <Metric label="Imbalance (1.0 = even)" value={formatNum(m.imbalance, 2)} />
             <Metric label="Max zone radius" value={`${formatNum(m.max_radius_km, 2)} km`} />
-            <Metric
-              label="Quantum answers used"
-              value={m.quantum_runs == null ? '—' : `${m.quantum_steps_used ?? 0} / ${m.quantum_runs}`}
-            />
+            {isAdmin && (
+              <Metric
+                label="Quantum answers used"
+                value={
+                  m.quantum_runs == null ? '—' : `${m.quantum_steps_used ?? 0} / ${m.quantum_runs}`
+                }
+              />
+            )}
             <Metric label="Calculation time" value={formatMs(plan.total_ms)} />
           </div>
 
           {skipped.length > 0 && (
             <p className="text-sm text-danger m-0">
-              {skipped.length} deliver{skipped.length === 1 ? 'y was' : 'ies were'} skipped (address
-              not geocoded).
+              {skipped.length} deliver
+              {skipped.length === 1 ? 'y was' : 'ies were'} skipped (address not geocoded).
             </p>
           )}
 

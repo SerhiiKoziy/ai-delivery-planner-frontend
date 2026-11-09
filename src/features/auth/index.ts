@@ -3,4 +3,12 @@ export { RegisterForm } from './components/RegisterForm';
 export { AuthLayout } from './components/AuthLayout';
 export { useAuth } from './api/useAuth';
 export { useVerifyEmail } from './api/useVerifyEmail';
-export type { AuthTokens, LoginRequest, RegisterRequest, RegisterResult } from './types';
+export { useCurrentUser, useIsAdmin } from './api/useCurrentUser';
+export type {
+  AuthTokens,
+  CurrentUser,
+  LoginRequest,
+  RegisterRequest,
+  RegisterResult,
+  UserRole,
+} from './types';
